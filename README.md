@@ -65,6 +65,10 @@ Escolhemos essa stack por oferecer a melhor combinação de performance em WebSo
 
 ## Início Rápido
 
+**🎯 Primeira vez?** Siga o [PASSO_A_PASSO.md](PASSO_A_PASSO.md) - um guia completo do zero!
+
+**⚡ Já conhece o projeto?** Use o [QUICKSTART.md](QUICKSTART.md) - versão resumida.
+
 ### Pré-requisitos
 
 - Node.js 20+
@@ -77,15 +81,11 @@ Escolhemos essa stack por oferecer a melhor combinação de performance em WebSo
 # Instalar dependências
 pnpm install
 
-# Configurar banco de dados
-cd server
-pnpm db:migrate
+# Configurar banco de dados (a partir da raiz)
+pnpm --filter @gambiarra/server db:migrate
 
 # Seed com dados de exemplo (PIN: 123456)
-pnpm seed
-
-# Voltar à raiz
-cd ..
+pnpm --filter @gambiarra/server seed
 ```
 
 ### Desenvolvimento
@@ -136,7 +136,7 @@ curl -X POST http://localhost:3000/rounds/start \
 Terminal 1 (cliente real com Ollama):
 ```bash
 cd client
-pnpm dev -- \
+pnpm dev \
   --url ws://localhost:3000/ws \
   --pin 123456 \
   --participant-id ana-desktop \
@@ -148,7 +148,7 @@ pnpm dev -- \
 Terminal 2 (cliente simulado):
 ```bash
 cd client
-pnpm dev -- \
+pnpm dev \
   --url ws://localhost:3000/ws \
   --pin 123456 \
   --participant-id bruno-sim \

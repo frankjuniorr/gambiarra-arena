@@ -1,10 +1,18 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function seed() {
   console.log('🌱 Seeding database...');
+
+  // Clean existing data
+  console.log('🧹 Cleaning existing data...');
+  await prisma.vote.deleteMany();
+  await prisma.metrics.deleteMany();
+  await prisma.participant.deleteMany();
+  await prisma.round.deleteMany();
+  await prisma.session.deleteMany();
 
   // Create test session with PIN 123456
   const pin = '123456';
@@ -20,38 +28,6 @@ async function seed() {
   console.log(`✅ Session created: ${session.id}`);
   console.log(`🔑 PIN: ${pin}`);
 
-  // Create test participants
-  const participants = [
-    {
-      id: 'ana-desktop',
-      nickname: 'Ana',
-      runner: 'ollama',
-      model: 'llama3.1:8b',
-    },
-    {
-      id: 'bruno-laptop',
-      nickname: 'Bruno',
-      runner: 'lmstudio',
-      model: 'mistral-7b',
-    },
-    {
-      id: 'carla-workstation',
-      nickname: 'Carla',
-      runner: 'ollama',
-      model: 'phi3:medium',
-    },
-  ];
-
-  for (const p of participants) {
-    await prisma.participant.create({
-      data: {
-        ...p,
-        sessionId: session.id,
-      },
-    });
-    console.log(`👤 Participant created: ${p.nickname} (${p.id})`);
-  }
-
   // Create test round
   const round = await prisma.round.create({
     data: {
@@ -66,9 +42,34 @@ async function seed() {
   });
 
   console.log(`📝 Round created: Round ${round.index}`);
+  console.log(`   Prompt: ${round.prompt}`);
 
   console.log('\n✨ Seed completed!');
-  console.log(`\nConnect participants with: --url ws://localhost:3000/ws --pin ${pin}\n`);
+  console.log(`
+📋 Próximos passos:
+
+1. Inicie o servidor:
+   pnpm dev
+
+2. Inicie a rodada (em outro terminal):
+   curl -X POST http://localhost:3000/rounds/start \\
+     -H "Content-Type: application/json" \\
+     -d '{"roundId":"${round.id}"}'
+
+3. Conecte clientes simulados:
+   pnpm simulate
+
+4. Ou conecte um cliente real:
+   cd client && pnpm dev \\
+     --url ws://localhost:3000/ws \\
+     --pin ${pin} \\
+     --participant-id seu-id \\
+     --nickname "Seu Nome" \\
+     --runner mock
+
+🌐 Telão: http://localhost:5173
+🗳️  Votação: http://localhost:5173?view=voting
+`);
 }
 
 seed()

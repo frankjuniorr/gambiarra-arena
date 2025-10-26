@@ -31,6 +31,7 @@ const app = Fastify({
   requestIdLogLabel: 'reqId',
   disableRequestLogging: false,
   requestIdHeader: 'x-request-id',
+  trustProxy: true, // Trust X-Forwarded-For headers
 });
 
 // Database

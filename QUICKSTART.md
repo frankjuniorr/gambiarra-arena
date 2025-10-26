@@ -20,11 +20,9 @@ cd gambiarra-club-framework-chatgpt
 # Instalar todas as dependências
 pnpm install
 
-# Configurar banco de dados
-cd server
-pnpm db:migrate
-pnpm seed  # Cria sessão com PIN 123456
-cd ..
+# Configurar banco de dados (a partir da raiz do projeto)
+pnpm --filter @gambiarra/server db:migrate
+pnpm --filter @gambiarra/server seed  # Cria sessão com PIN 123456
 ```
 
 ### 3. Iniciar
@@ -53,7 +51,7 @@ curl http://localhost:3000/session | jq '.rounds[0].id'
 # Iniciar rodada (substitua ROUND_ID)
 curl -X POST http://localhost:3000/rounds/start \
   -H "Content-Type: application/json" \
-  -d '{"roundId": "ROUND_ID"}'
+  -d '{"roundId": "f17c6004-abbd-4e16-a4ef-5fe6a61101c4"}'
 ```
 
 **Pronto!** Os clientes simulados começarão a gerar tokens visíveis no telão.

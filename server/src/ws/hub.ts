@@ -1,6 +1,6 @@
 import type { WebSocket } from '@fastify/websocket';
 import type { FastifyBaseLogger } from 'fastify';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import {
   ClientMessageSchema,

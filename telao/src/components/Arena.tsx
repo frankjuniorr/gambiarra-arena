@@ -50,13 +50,18 @@ function Arena() {
   const [votingUrl, setVotingUrl] = useState('');
 
   useEffect(() => {
-    // Fetch session data
-    fetch('/api/session')
-      .then((res) => res.json())
-      .then((data) => {
-        setParticipants(data.participants || []);
-      })
-      .catch((err) => console.error('Failed to fetch session:', err));
+    // Fetch session data periodically
+    const fetchSession = () => {
+      fetch('/api/session')
+        .then((res) => res.json())
+        .then((data) => {
+          setParticipants(data.participants || []);
+        })
+        .catch((err) => console.error('Failed to fetch session:', err));
+    };
+
+    fetchSession();
+    const sessionInterval = setInterval(fetchSession, 2000);
 
     // Fetch current round
     const fetchRound = () => {
@@ -87,7 +92,10 @@ function Arena() {
     const baseUrl = window.location.origin;
     setVotingUrl(`${baseUrl}?view=voting`);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearInterval(sessionInterval);
+    };
   }, []);
 
   // WebSocket for live updates (optional enhancement)

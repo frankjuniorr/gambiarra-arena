@@ -9,11 +9,11 @@
     "telao"
   ],
   "scripts": {
-    "dev": "pnpm --parallel -r dev",
+    "dev": "pnpm --parallel --filter @gambiarra/server --filter @gambiarra/telao dev",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
-    "simulate": "pnpm --filter client simulate",
-    "seed": "pnpm --filter server seed",
+    "simulate": "pnpm --filter @gambiarra/client simulate",
+    "seed": "pnpm --filter @gambiarra/server seed",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   },
