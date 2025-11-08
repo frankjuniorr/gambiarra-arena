@@ -2,3 +2,4 @@ packages:
   - 'server'
   - 'client-typescript'
   - 'telao'
+  # Note: server-python and client-python are Python projects, not part of pnpm workspace

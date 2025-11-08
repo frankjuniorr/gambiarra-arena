@@ -57,11 +57,23 @@ Escolhemos essa stack por oferecer a melhor combinação de performance em WebSo
 
 **Stack principal:**
 - Backend: Node.js 20+ com TypeScript, Fastify, Prisma ORM
+- Backend alternativo: Python 3.9+ com FastAPI, SQLAlchemy, Pydantic
 - Frontend: React 18+ com Vite e Tailwind CSS
-- Database: SQLite com migrações Prisma
+- Database: SQLite com migrações Prisma (Node) ou Alembic (Python)
 - WebSocket: @fastify/websocket para streaming de tokens
-- Validação: Zod para schemas end-to-end
+- Validação: Zod para schemas end-to-end (Node) ou Pydantic (Python)
 - Package manager: pnpm para instalação rápida
+
+### 🐍 Servidor Python Disponível!
+
+Além do servidor Node.js/TypeScript, oferecemos uma implementação completa em Python usando FastAPI:
+- **Localização:** `server-python/`
+- **Funcionalidades:** 100% compatível com os clientes (Python e TypeScript)
+- **Documentação:** Ver [server-python/README.md](server-python/README.md)
+- **Início rápido:** Ver [server-python/QUICKSTART.md](server-python/QUICKSTART.md)
+- **Stack:** FastAPI + SQLAlchemy 2.0 + Pydantic + aiosqlite
+
+**Nota:** O servidor Python usa schema de banco independente. Escolha um servidor (Node.js ou Python) e use-o consistentemente.
 
 ## Início Rápido
 
