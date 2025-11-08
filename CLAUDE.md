@@ -28,9 +28,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Monorepo Structure
 
 ```
-├── server/          # Fastify backend with WebSocket hub
-├── client/          # CLI for participants to connect their LLMs
-├── telao/           # React frontend for public display
+├── server/              # Fastify backend with WebSocket hub
+├── client-typescript/   # TypeScript CLI for participants to connect their LLMs
+├── client-python/       # Python CLI for participants to connect their LLMs
+├── telao/               # React frontend for public display
 ```
 
 ### Key Components
@@ -42,11 +43,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `src/http/routes.ts`: REST API for session/round control
 - `prisma/schema.prisma`: Database schema (Session, Participant, Round, Metrics, Vote)
 
-**Client (`client/`):**
+**Client TypeScript (`client-typescript/`):**
 - `src/runners/ollama.ts`: Ollama API integration
 - `src/runners/lmstudio.ts`: LM Studio API integration
 - `src/runners/mock.ts`: Simulated token generation for testing
 - `src/net/ws.ts`: WebSocket client with reconnection logic
+
+**Client Python (`client-python/`):**
+- `gambiarra_client/runners/ollama.py`: Ollama API integration
+- `gambiarra_client/runners/lmstudio.py`: LM Studio API integration
+- `gambiarra_client/runners/mock.py`: Simulated token generation for testing
+- `gambiarra_client/net/ws.py`: WebSocket client with reconnection logic
 
 **Telão (`telao/`):**
 - `src/components/Arena.tsx`: Main display with participant grid
@@ -68,10 +75,16 @@ pnpm db:generate      # Generate Prisma Client
 pnpm seed             # Seed with test data (PIN: 123456)
 pnpm dev              # Start server with hot reload
 
-# Client
-cd client
+# Client TypeScript
+cd client-typescript
 pnpm dev -- --url ws://localhost:3000/ws --pin 123456 \
   --participant-id test-1 --nickname "Test" --runner mock
+
+# Client Python
+cd client-python
+pip install -e .
+gambiarra-client --url ws://localhost:3000/ws --pin 123456 \
+  --participant-id test-2 --nickname "Test Python" --runner mock
 
 # Telão
 cd telao
@@ -102,7 +115,7 @@ All messages validated with Zod schemas in `server/src/ws/schemas.ts`.
 
 ## Testing Strategy
 
-- **Unit tests**: Schema validation (`server/src/ws/schemas.test.ts`), runner logic (`client/src/runners/mock.test.ts`)
+- **Unit tests**: Schema validation (`server/src/ws/schemas.test.ts`), runner logic (`client-typescript/src/runners/mock.test.ts`)
 - **Integration**: Simulation script connects 5 clients and validates token sequencing
 - **Manual**: Use `pnpm seed` + `pnpm simulate` for end-to-end validation
 
@@ -128,9 +141,14 @@ Server config via environment variables (see `server/.env.example`):
 
 ## Adding New Features
 
-**New Runner:**
-1. Create `client/src/runners/newrunner.ts` implementing `Runner` interface
-2. Add case in `client/src/cli.ts` switch statement
+**New Runner (TypeScript):**
+1. Create `client-typescript/src/runners/newrunner.ts` implementing `Runner` interface
+2. Add case in `client-typescript/src/cli.ts` switch statement
+3. Add `--newrunner-url` option to CLI
+
+**New Runner (Python):**
+1. Create `client-python/gambiarra_client/runners/newrunner.py` implementing `Runner` class
+2. Add case in `client-python/gambiarra_client/cli.py` switch statement
 3. Add `--newrunner-url` option to CLI
 
 **New Game Mode:**

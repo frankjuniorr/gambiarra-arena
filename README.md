@@ -136,9 +136,9 @@ curl -X POST http://localhost:3000/rounds/start \
 
 **4. Conectar participantes:**
 
-Terminal 1 (cliente real com Ollama):
+Terminal 1 (cliente TypeScript com Ollama):
 ```bash
-cd client
+cd client-typescript
 pnpm dev \
   --url ws://localhost:3000/ws \
   --pin 123456 \
@@ -148,10 +148,11 @@ pnpm dev \
   --model llama3.1:8b
 ```
 
-Terminal 2 (cliente simulado):
+Terminal 2 (cliente Python com mock):
 ```bash
-cd client
-pnpm dev \
+cd client-python
+pip install -e .
+gambiarra-client \
   --url ws://localhost:3000/ws \
   --pin 123456 \
   --participant-id bruno-sim \
@@ -197,20 +198,24 @@ docker compose up --build
 
 ```
 gambiarra-club-framework-chatgpt/
-├── server/          # Backend Fastify com WebSocket
+├── server/              # Backend Fastify com WebSocket
 │   ├── src/
-│   │   ├── ws/      # WebSocket hub e schemas
-│   │   ├── http/    # Rotas HTTP
-│   │   ├── core/    # Lógica de negócio (rounds, votes, metrics)
-│   │   └── db/      # Prisma schema e migrações
+│   │   ├── ws/          # WebSocket hub e schemas
+│   │   ├── http/        # Rotas HTTP
+│   │   ├── core/        # Lógica de negócio (rounds, votes, metrics)
+│   │   └── db/          # Prisma schema e migrações
 │   └── README.md
-├── client/          # CLI para participantes
+├── client-typescript/   # CLI TypeScript para participantes
 │   ├── src/
-│   │   ├── runners/ # Integrações Ollama, LM Studio, Mock
-│   │   ├── net/     # Cliente WebSocket
-│   │   └── scripts/ # Simulação
+│   │   ├── runners/     # Integrações Ollama, LM Studio, Mock
+│   │   ├── net/         # Cliente WebSocket
+│   │   └── scripts/     # Simulação
 │   └── README.md
-├── telao/           # Frontend React
+├── client-python/       # CLI Python para participantes
+│   └── gambiarra_client/
+│       ├── runners/     # Integrações Ollama, LM Studio, Mock
+│       └── net/         # Cliente WebSocket
+├── telao/               # Frontend React
 │   └── src/
 │       └── components/
 └── docker-compose.yml
