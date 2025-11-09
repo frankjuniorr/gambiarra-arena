@@ -30,9 +30,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 ├── server/              # Fastify backend with WebSocket hub
 ├── client-typescript/   # TypeScript CLI for participants to connect their LLMs
-├── client-python/       # Python CLI for participants to connect their LLMs
 ├── telao/               # React frontend for public display
 ```
+
+> **Note:** The Python client has been moved to a separate repository.
 
 ### Key Components
 
@@ -48,12 +49,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `src/runners/lmstudio.ts`: LM Studio API integration
 - `src/runners/mock.ts`: Simulated token generation for testing
 - `src/net/ws.ts`: WebSocket client with reconnection logic
-
-**Client Python (`client-python/`):**
-- `gambiarra_client/runners/ollama.py`: Ollama API integration
-- `gambiarra_client/runners/lmstudio.py`: LM Studio API integration
-- `gambiarra_client/runners/mock.py`: Simulated token generation for testing
-- `gambiarra_client/net/ws.py`: WebSocket client with reconnection logic
 
 **Telão (`telao/`):**
 - `src/components/Arena.tsx`: Main display with participant grid
@@ -79,12 +74,6 @@ pnpm dev              # Start server with hot reload
 cd client-typescript
 pnpm dev -- --url ws://localhost:3000/ws --pin 123456 \
   --participant-id test-1 --nickname "Test" --runner mock
-
-# Client Python
-cd client-python
-pip install -e .
-gambiarra-client --url ws://localhost:3000/ws --pin 123456 \
-  --participant-id test-2 --nickname "Test Python" --runner mock
 
 # Telão
 cd telao
@@ -144,11 +133,6 @@ Server config via environment variables (see `server/.env.example`):
 **New Runner (TypeScript):**
 1. Create `client-typescript/src/runners/newrunner.ts` implementing `Runner` interface
 2. Add case in `client-typescript/src/cli.ts` switch statement
-3. Add `--newrunner-url` option to CLI
-
-**New Runner (Python):**
-1. Create `client-python/gambiarra_client/runners/newrunner.py` implementing `Runner` class
-2. Add case in `client-python/gambiarra_client/cli.py` switch statement
 3. Add `--newrunner-url` option to CLI
 
 **New Game Mode:**

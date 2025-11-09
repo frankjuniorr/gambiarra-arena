@@ -160,11 +160,10 @@ pnpm dev \
   --model llama3.1:8b
 ```
 
-Terminal 2 (cliente Python com mock):
+Terminal 2 (cliente TypeScript com mock):
 ```bash
-cd client-python
-pip install -e .
-gambiarra-client \
+cd client-typescript
+pnpm dev \
   --url ws://localhost:3000/ws \
   --pin 123456 \
   --participant-id bruno-sim \
@@ -223,15 +222,13 @@ gambiarra-club-framework-chatgpt/
 │   │   ├── net/         # Cliente WebSocket
 │   │   └── scripts/     # Simulação
 │   └── README.md
-├── client-python/       # CLI Python para participantes
-│   └── gambiarra_client/
-│       ├── runners/     # Integrações Ollama, LM Studio, Mock
-│       └── net/         # Cliente WebSocket
 ├── telao/               # Frontend React
 │   └── src/
 │       └── components/
 └── docker-compose.yml
 ```
+
+> **Nota:** O cliente Python foi movido para um repositório separado. Para mais informações, consulte o README no novo repositório.
 
 ## Criando Novos Desafios
 
