@@ -53,12 +53,19 @@ function SvgRenderer({ content, isGenerating }: SvgRendererProps) {
 
   return (
     <div className="mt-4 p-4 bg-gray-900 rounded border border-primary">
-      {isGenerating && (
-        <div className="mb-2 flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-xs text-green-400">Construindo imagem...</span>
-        </div>
-      )}
+      <div className="mb-2 flex items-center gap-2">
+        {isGenerating ? (
+          <>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-xs text-green-400">Construindo imagem...</span>
+          </>
+        ) : (
+          <>
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <span className="text-xs text-blue-400">Imagem concluída</span>
+          </>
+        )}
+      </div>
 
       <div
         className="flex items-center justify-center bg-white rounded p-4 min-h-[200px]"

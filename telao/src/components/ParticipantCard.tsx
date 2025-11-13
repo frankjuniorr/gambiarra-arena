@@ -33,11 +33,18 @@ function ParticipantCard({
           <h3 className="text-2xl font-bold text-primary">{participant.nickname}</h3>
           <p className="text-sm text-gray-400">{participant.id}</p>
         </div>
-        {isGenerating && (
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm text-green-400 font-semibold">Gerando</span>
-          </div>
+        {content && (
+          isGenerating ? (
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-green-400 font-semibold">Gerando</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+              <span className="text-sm text-blue-400 font-semibold">Finalizado</span>
+            </div>
+          )
         )}
       </div>
 

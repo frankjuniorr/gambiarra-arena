@@ -86,15 +86,29 @@ function Arena() {
           setCurrentRound(data);
           // Initialize participant states from live tokens
           if (data.liveTokens) {
-            const newStates: Record<string, ParticipantState> = {};
-            for (const [pid, tokens] of Object.entries(data.liveTokens)) {
-              newStates[pid] = {
-                tokens: (tokens as string[]).length,
-                isGenerating: !data.endedAt,
-                content: tokens as string[],
-              };
-            }
-            setParticipantStates(newStates);
+            setParticipantStates((prevStates) => {
+              const newStates: Record<string, ParticipantState> = { ...prevStates };
+              for (const [pid, tokens] of Object.entries(data.liveTokens)) {
+                // Only update if we don't have this participant yet, or merge carefully
+                const existingState = newStates[pid];
+                if (!existingState) {
+                  // New participant - initialize
+                  newStates[pid] = {
+                    tokens: (tokens as string[]).length,
+                    isGenerating: !data.endedAt,
+                    content: tokens as string[],
+                  };
+                } else {
+                  // Existing participant - preserve isGenerating if already false
+                  newStates[pid] = {
+                    tokens: (tokens as string[]).length,
+                    isGenerating: existingState.isGenerating === false ? false : !data.endedAt,
+                    content: tokens as string[],
+                  };
+                }
+              }
+              return newStates;
+            });
           }
         })
         .catch((err) => console.error('Failed to fetch round:', err));

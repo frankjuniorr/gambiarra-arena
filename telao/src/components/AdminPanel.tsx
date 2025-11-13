@@ -40,6 +40,7 @@ export function AdminPanel() {
 
   // Predefined prompt templates
   const promptTemplates = [
+    'Crie o SVG de uma capivara dançando frevo',
     'Escreva uma poesia em métrica de xote pernambucano sobre IA',
     'Conte uma história curta de ficção científica sobre robôs',
     'Explique o conceito de entropia de forma criativa',
@@ -294,15 +295,28 @@ export function AdminPanel() {
                 />
                 <div className="mt-2 flex flex-wrap gap-2">
                   <span className="text-sm text-gray-400">Sugestões:</span>
-                  {promptTemplates.map((template, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setNewPrompt(template)}
-                      className="text-xs bg-gray-600 hover:bg-gray-500 px-2 py-1 rounded"
-                    >
-                      {template.substring(0, 30)}...
-                    </button>
-                  ))}
+                  {promptTemplates.map((template, idx) => {
+                    const isSvgTemplate = template.toLowerCase().includes('svg');
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setNewPrompt(template);
+                          if (isSvgTemplate) {
+                            setSvgMode(true);
+                          }
+                        }}
+                        className={`text-xs px-2 py-1 rounded ${
+                          isSvgTemplate
+                            ? 'bg-primary/20 border border-primary text-primary hover:bg-primary/30'
+                            : 'bg-gray-600 hover:bg-gray-500'
+                        }`}
+                      >
+                        {isSvgTemplate && '🎨 '}
+                        {template.substring(0, 30)}...
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
