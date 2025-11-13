@@ -17,6 +17,7 @@ interface Round {
   prompt: string;
   maxTokens: number;
   deadlineMs: number;
+  svgMode: boolean;
   startedAt: string | null;
   endedAt: string | null;
   liveTokens?: Record<string, string[]>;
@@ -241,6 +242,7 @@ function Arena() {
               maxTokens={currentRound?.maxTokens || 400}
               isGenerating={state.isGenerating}
               content={state.content.join('')}
+              svgMode={currentRound?.svgMode || false}
             />
           );
         })}

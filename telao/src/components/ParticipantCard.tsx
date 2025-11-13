@@ -1,3 +1,5 @@
+import SvgRenderer from './SvgRenderer';
+
 interface Participant {
   id: string;
   nickname: string;
@@ -11,6 +13,7 @@ interface ParticipantCardProps {
   maxTokens: number;
   isGenerating: boolean;
   content: string;
+  svgMode?: boolean;
 }
 
 function ParticipantCard({
@@ -19,6 +22,7 @@ function ParticipantCard({
   maxTokens,
   isGenerating,
   content,
+  svgMode = false,
 }: ParticipantCardProps) {
   const progress = (tokens / maxTokens) * 100;
 
@@ -57,11 +61,15 @@ function ParticipantCard({
       </div>
 
       {content && (
-        <div className="mt-4 p-4 bg-gray-900 rounded border border-gray-700 max-h-48 overflow-y-auto">
-          <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono">
-            {content}
-          </pre>
-        </div>
+        svgMode ? (
+          <SvgRenderer content={content} isGenerating={isGenerating} />
+        ) : (
+          <div className="mt-4 p-4 bg-gray-900 rounded border border-gray-700 max-h-48 overflow-y-auto">
+            <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono">
+              {content}
+            </pre>
+          </div>
+        )
       )}
     </div>
   );

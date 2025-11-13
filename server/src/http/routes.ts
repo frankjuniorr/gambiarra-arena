@@ -17,6 +17,7 @@ const CreateRoundSchema = z.object({
   temperature: z.number().optional(),
   deadlineMs: z.number().optional(),
   seed: z.number().optional(),
+  svgMode: z.boolean().optional(),
 });
 
 const StartRoundSchema = z.object({

@@ -47,6 +47,7 @@ model Round {
   temperature Float    @default(0.8)
   deadlineMs Int       @default(90000)
   seed       Int?
+  svgMode    Boolean   @default(false)
   startedAt  DateTime?
   endedAt    DateTime?
   session    Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useToast } from '../hooks/useToast';
+import { ToastContainer } from './Toast';
 
 interface Session {
   id: string;
@@ -15,12 +17,14 @@ interface Round {
   maxTokens: number;
   temperature: number;
   deadlineMs: number;
+  svgMode: boolean;
   startedAt: string | null;
   endedAt: string | null;
   createdAt?: string;
 }
 
 export function AdminPanel() {
+  const toast = useToast();
   const [session, setSession] = useState<Session | null>(null);
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +36,7 @@ export function AdminPanel() {
   const [maxTokens, setMaxTokens] = useState(500);
   const [temperature, setTemperature] = useState(0.7);
   const [deadlineMs, setDeadlineMs] = useState(120000);
+  const [svgMode, setSvgMode] = useState(false);
 
   // Predefined prompt templates
   const promptTemplates = [
@@ -102,7 +107,7 @@ export function AdminPanel() {
         // Save PIN to localStorage
         localStorage.setItem('gambiarra_session_pin', data.pin);
         localStorage.setItem('gambiarra_session_id', data.session_id);
-        alert(`Sessão criada! PIN: ${data.pin}`);
+        toast.success(`Sessão criada! PIN: ${data.pin}`);
         loadSession(); // Reload to get full session data
       } else {
         const errorData = await response.text();
@@ -138,14 +143,15 @@ export function AdminPanel() {
           maxTokens,
           temperature,
           deadlineMs,
-          seed: Math.floor(Math.random() * 1000000)
+          seed: Math.floor(Math.random() * 1000000),
+          svgMode
         })
       });
       if (response.ok) {
         const data = await response.json();
         setRounds([...rounds, data]);
         setNewPrompt('');
-        alert(`Rodada ${data.index} criada com sucesso!`);
+        toast.success(`Rodada ${data.index} criada com sucesso!`);
         loadSession(); // Refresh to get updated rounds list
       } else {
         const errorText = await response.text();
@@ -168,7 +174,7 @@ export function AdminPanel() {
         body: JSON.stringify({ roundId })
       });
       if (response.ok) {
-        alert('Rodada iniciada!');
+        toast.success('Rodada iniciada!');
         loadSession();
       } else {
         setError('Erro ao iniciar rodada');
@@ -190,7 +196,7 @@ export function AdminPanel() {
         body: JSON.stringify({ roundId })
       });
       if (response.ok) {
-        alert('Rodada parada!');
+        toast.success('Rodada parada!');
         loadSession();
       } else {
         setError('Erro ao parar rodada');
@@ -204,6 +210,7 @@ export function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
+      <ToastContainer toasts={toast.toasts} onRemove={toast.removeToast} />
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">Admin Panel - Gambiarra Club</h1>
 
@@ -328,6 +335,21 @@ export function AdminPanel() {
                   />
                 </div>
               </div>
+              <div className="flex items-center gap-3 p-4 bg-gray-700 rounded">
+                <input
+                  type="checkbox"
+                  id="svgMode"
+                  checked={svgMode}
+                  onChange={(e) => setSvgMode(e.target.checked)}
+                  className="w-5 h-5 accent-primary cursor-pointer"
+                />
+                <label htmlFor="svgMode" className="cursor-pointer">
+                  <span className="font-bold text-primary">SVG Mode</span>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Quando ativado, o telão renderizará SVGs ao invés de texto puro. Use para desafios de criação de imagens SVG.
+                  </p>
+                </label>
+              </div>
               <button
                 onClick={createRound}
                 disabled={loading}
@@ -382,6 +404,11 @@ export function AdminPanel() {
                     <p><strong>Deadline:</strong> {(round.deadlineMs / 1000).toFixed(0)}s</p>
                     <p><strong>Index:</strong> {round.index}</p>
                   </div>
+                  {round.svgMode && (
+                    <div className="mb-3 px-3 py-2 bg-primary/20 border border-primary rounded">
+                      <span className="text-primary font-bold text-sm">🎨 SVG Mode Ativo</span>
+                    </div>
+                  )}
                   {round.startedAt && (
                     <div className="text-xs text-gray-400 mb-3">
                       <p>Iniciada: {new Date(round.startedAt).toLocaleString('pt-BR')}</p>

@@ -9,6 +9,7 @@ export interface CreateRoundParams {
   temperature?: number;
   deadlineMs?: number;
   seed?: number;
+  svgMode?: boolean;
 }
 
 export class RoundManager {
@@ -39,6 +40,7 @@ export class RoundManager {
         temperature: params.temperature ?? 0.8,
         deadlineMs: params.deadlineMs ?? 90000,
         seed: params.seed,
+        svgMode: params.svgMode ?? false,
       },
     });
 

@@ -9,7 +9,14 @@
       "Bash(pnpm build:*)",
       "Bash(docker run:*)",
       "Bash(curl:*)",
-      "Bash(pnpm dev:*)"
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm db:generate:*)",
+      "Bash(pnpm db:migrate:*)",
+      "Bash(pnpm --filter server db:migrate dev:*)",
+      "Bash(pnpm prisma migrate dev:*)",
+      "Bash(pnpm --filter telao build:*)",
+      "Bash(sqlite3:*)",
+      "Bash(pnpm --filter server build:*)"
     ],
     "deny": [],
     "ask": []
